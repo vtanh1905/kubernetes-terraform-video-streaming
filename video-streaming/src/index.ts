@@ -4,12 +4,13 @@ import fs, { Stats } from "fs";
 const app: Express = express();
 
 if (!process.env.PORT) {
-  throw new Error("Please specify the port number ➥ for the HTTP server with the environment variable PORT.");
+  throw new Error("[Video-Streaming]: Please define enviroment variable");
 } 
+
 const port: number = +process.env.PORT;
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("Video Streaming Microserver");
 });
 
 app.get("/video", (req: Request, res: Response) => {
@@ -29,5 +30,5 @@ app.get("/video", (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+  console.log(`⚡️[Video-Streaming]: Server is running at http://localhost:${port}`);
 });

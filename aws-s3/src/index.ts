@@ -2,17 +2,22 @@ import express, { Express, Request, Response } from "express";
 import AWS, { S3 } from "aws-sdk";
 
 const app: Express = express();
-const port = 3000;
+
+if(!process.env.ACCESS_KEY_ID || !process.env.SECRET_ACCESS_KEY || !process.env.PORT) {
+  throw new Error("[AWS-S3]: Please define enviroment variable");
+}
+
+const port = process.env.PORT;
 
 AWS.config.update({
-  accessKeyId: "",
-  secretAccessKey: "",
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
 });
 
 const s3: S3 = new S3({ apiVersion: "2006-03-01" });
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("AWS S3 MicroService");
 });
 
 app.get("/video", async (req: Request, res: Response) => {
