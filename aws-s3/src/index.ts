@@ -21,16 +21,26 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.get("/video", async (req: Request, res: Response) => {
-  const param: S3.Types.GetObjectRequest = {
-    Bucket: "practise-microservices",
-    Key: "videos/sample-video.mp4",
-  };
-  const dataFile:S3.Types.HeadObjectOutput = await s3.headObject(param).promise();
-  res.writeHead(200, {
-    "Content-Length": dataFile.ContentLength,
-    "Content-Type": "video/mp4",
-  });
-  s3.getObject(param).createReadStream().pipe(res);
+  const { path } = req.query;
+  if(!path){
+    res.sendStatus(400);
+    return;
+  }
+  try {
+    const param: S3.Types.GetObjectRequest = {
+      Bucket: "practise-microservices",
+      Key: `videos/${path}`,
+    };
+    const dataFile:S3.Types.HeadObjectOutput = await s3.headObject(param).promise();
+    res.writeHead(200, {
+      "Content-Length": dataFile.ContentLength,
+      "Content-Type": "video/mp4",
+    });
+    s3.getObject(param).createReadStream().pipe(res);
+  } catch (error) {
+    console.error("[AWS-S3] Can't get the object on S3", error);
+    res.sendStatus(500);
+  }
 });
 
 app.listen(port, () => {

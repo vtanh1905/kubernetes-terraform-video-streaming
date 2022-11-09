@@ -32,7 +32,7 @@ app.get("/video", (req: Request, res: Response) => {
     {
       host: "localhost",
       port: 3010,
-      path: "/video",
+      path: "/video?path=sample-video.mp4",
       method: "GET",
       headers: req.headers,
     },
